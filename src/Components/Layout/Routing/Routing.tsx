@@ -63,6 +63,7 @@ function Routing(): JSX.Element {
                 <Route path="/addVacation" element={isAdmin ? <AddVacation/> : <Navigate to="*"/>}/>
                 <Route path="/updateVacation/:id" element={isAdmin ? <UpdateVacation/> : <Navigate to="*"/>}/>
                 <Route path="/" element={<HomePage/>}/>
+                <Route path="/VacationProject" element={<HomePage/>}/>
                 <Route path="*" element={<PageNotFound/>}/>
 
             </Routes>
