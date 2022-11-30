@@ -1,4 +1,4 @@
-export class SavedModel {
+class SavedModel {
     public user_ID: number;
     public vacation_ID: number;
 
@@ -7,3 +7,4 @@ export class SavedModel {
         this.vacation_ID = vacation_ID;
     }
 };
+export default SavedModel;

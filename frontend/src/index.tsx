@@ -4,7 +4,13 @@ import { BrowserRouter } from "react-router-dom";
 import Layout from "./Components/Layout/Layout/Layout";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import interceptorsService from "./utils/interceptorsService";
+import socketIoService from "./utils/SocketIoService";
 
+interceptorsService.createInterceptors();
+
+socketIoService.connect();
 
 ReactDOM.render(
   <React.StrictMode>

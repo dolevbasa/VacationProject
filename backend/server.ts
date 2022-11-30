@@ -4,7 +4,7 @@ import config from "./utils/config";
 import catchAll from "./middleware/catch-all";
 import routeNotFound from "./middleware/route-not-found";
 import controller from "./routes/controller"
-import socketLogics from "./logic/socket-logics";
+import socket from "./utils/socket";
 
 //create the server
 const server = express();
@@ -27,4 +27,4 @@ server.use(catchAll);
 const httpServer = server.listen(config.port, () =>
   console.log("Listening on http://localhost:" + config.port)
 );
-socketLogics.initSocketIo(httpServer);
+socket.initSocketIo(httpServer);

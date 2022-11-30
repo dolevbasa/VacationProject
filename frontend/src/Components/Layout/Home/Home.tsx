@@ -1,5 +1,7 @@
 import Card from '@mui/material/Card';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
+import ReactPaginate from 'react-paginate';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -22,11 +24,7 @@ import Follow from '../../VacationArea/Follow/Follow';
         vacation: VacationModel;
         user: UserModel;
     }
-    
-    
     function Home(props: VacationCardProps): JSX.Element {
-    
-    
         const navigator = useNavigate();
         // Delete vacation
         async function handleDelete(vacationId: number) {

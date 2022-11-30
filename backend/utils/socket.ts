@@ -1,6 +1,6 @@
 import { Server as HttpServer } from 'http';
 import { Server as SocketIoServer, Socket } from 'socket.io';
-import { SavedModel } from '../model/savedVacation';
+import SavedModel from '../model/savedVacation';
 import { VacationModel } from '../model/vacation';
 
 

@@ -14,7 +14,7 @@ class VacationService {
 
     // Get all followed vacations:
     public async getAllFollowedVacations(): Promise<VacationModel[]> {
-        const response = await axios.get<VacationModel[]>(appUrl.getAllVacation);
+        const response = await axios.get<VacationModel[]>(appUrl.getFollowers);
         const followedVacations = response.data;
         return followedVacations;
     }

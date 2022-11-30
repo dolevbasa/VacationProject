@@ -1,13 +1,13 @@
 import { Request } from "express";
 import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
-import { UserModel } from "../model/user";
+import UserModel from "../model/user";
 import config from "./config";
 
-const secretKey = "Secret-Key";
+const secretKey = "SecretKey";
 
 function getNewToken(user: UserModel): string {
     const payload = { user };
-    const token = jwt.sign(payload, secretKey,{expiresIn:'60h'});
+    const token = jwt.sign(payload, secretKey,{expiresIn:'1h'});
     return token;
 }
 

@@ -1,14 +1,13 @@
-import { UserModel } from '../model/user';
+import UserModel from '../model/user';
 import { VacationModel } from '../model/vacation'
 import dal from '../utils/dal_mysql';
 import { v4 as uuid } from "uuid";
 import { OkPacket } from 'mysql';
-import { SavedModel } from '../model/savedVacation';
+import SavedModel from '../model/savedVacation';
 import ClientError from '../model/client-errors';
 import jwt from '../utils/jwt';
 import Role from '../model/Role';
 import socket from '../utils/socket';
-import socketLogics from './socket-logics';
 // users
 async function getAllUsers(): Promise<UserModel[]> {
   const sql = `SELECT * FROM vacations.user;`;
@@ -61,21 +60,21 @@ async function getOneVacation(id: number) {
 };
 
 async function followVacation(data: SavedModel): Promise<SavedModel> {
-  const sql = `INSERT INTO savedvacations(user_ID,vacation_ID)
+  const sql = `INSERT INTO followers(user_ID,vacation_ID)
   VALUES(${data.user_ID} ,${data.vacation_ID})`;
   const vacation = await dal.execute(sql);
   return vacation;
 }
 
 async function getFollowedVacations(id:number): Promise<SavedModel> {
-  const sql = `SELECT vacationId FROM savedvacations 
+  const sql = `SELECT vacationId FROM followers 
 WHERE userId = ${id}`;
   const vacations = await dal.execute(sql);
   return vacations;
 }
 
 async function deleteFollowedVacation(userId: number, vacationId: number):Promise<void> {
-  const sql = `DELETE FROM savedvacations WHERE userId = ${userId} and vacationId = ${vacationId}`;
+  const sql = `DELETE FROM followers WHERE userId = ${userId} and vacationId = ${vacationId}`;
   await dal.execute(sql);
 }
 
@@ -116,14 +115,21 @@ async function updateFullVacation(vacation: VacationModel): Promise<VacationMode
   return vacation;
 }
 
-async function getAllFollowedVacations():Promise<SavedModel>{
-  const sql = 'SELECT * FROM savedvacations';
+async function getAllFollowedVacations(userId:number):Promise<SavedModel>{
+  const sql = `
+  SELECT vacation.id, destination,
+                    from_date, 
+                    to_date, description, image, destination, followers, price 
+                    FROM vacations.vacation
+                    JOIN followers on vacation.id = followers.user_ID 
+                    WHERE id = ${userId}
+  `;
   const vacations = await dal.execute(sql);
   return vacations;
 }
 // Add follow vacation
 async function addFollow(vacationToFollow: SavedModel): Promise<SavedModel> {
-  const sql = `INSERT INTO savedvacations VALUES(${vacationToFollow.user_ID}, ${vacationToFollow.vacation_ID})`;
+  const sql = `INSERT INTO followers VALUES(${vacationToFollow.user_ID}, ${vacationToFollow.vacation_ID})`;
   const result: OkPacket = await dal.execute(sql);
 
   // update +1 to followers in vacations table
@@ -131,14 +137,14 @@ async function addFollow(vacationToFollow: SavedModel): Promise<SavedModel> {
                           SET followers = followers + 1 
                           WHERE id = ${vacationToFollow.vacation_ID}`;
   const info: OkPacket = await dal.execute(sqlVacationsTable);
-  socketLogics.emitAddFollow(vacationToFollow);
+  socket.emitAddFollow(vacationToFollow);
   return vacationToFollow;
 }
 
 // Remove follow 
 async function removeFollow(follow: SavedModel): Promise<void> {
   // remove follower from followers table
-  const sqlFollowerTable = `DELETE FROM savedvacations 
+  const sqlFollowerTable = `DELETE FROM followers
     WHERE vacation_ID=${follow.vacation_ID} 
     AND user_ID=${follow.user_ID}`;
   const results: OkPacket = await dal.execute(sqlFollowerTable);
@@ -147,7 +153,7 @@ async function removeFollow(follow: SavedModel): Promise<void> {
                               SET followers = followers - 1 
                               WHERE id = ${follow.vacation_ID}`;
   const info: OkPacket = await dal.execute(sqlVacationsTable);
-  socketLogics.emitRemoveFollow(follow);
+  socket.emitRemoveFollow(follow);
 }
 
 export default {
