@@ -12,9 +12,9 @@ function initSocketIo(httpServer: HttpServer): void {
     };
     socketIoServer = new SocketIoServer(httpServer, options);
     socketIoServer.sockets.on("connection", (socket: Socket) => {
-        console.log("One client has been connected...");
+        console.log("client has been connected...");
         socket.on("disconnect", () => {
-            console.log("One client has been disconnected...");
+            console.log("Client has been disconnected...");
         });
     });
 }

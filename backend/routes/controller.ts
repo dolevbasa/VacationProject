@@ -84,7 +84,7 @@ router.get('/api/getFollowedVacations', async (request: Request, response: Respo
   try {
         const user = jwt.getUserFromToken(request);
         const followedVacation = await logic.getAllFollowedVacations(user.id);
-        response.json(followedVacation);
+        response.status(201).json(followedVacation);
   }
   catch (err: any) {
     next(err)
@@ -145,7 +145,7 @@ router.delete("/api/remove/:id",verifyToken, async (request: Request, response: 
     const user = jwt.getUserFromToken(request);
     const follower = new SavedModel(user.id, vacationId);
     await logic.removeFollow(follower);
-    response.sendStatus(204);
+    response.status(204).json(follower);
   }
   catch (err: any) {
       next(err);

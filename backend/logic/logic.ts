@@ -46,18 +46,24 @@ async function addUser(user: UserModel){
 //id,description,destination,from_date,to_date,price,followers,CONVERT(image USING utf8) as image
 // vacations
 async function getAllVacations(): Promise<UserModel[]> {
-  const sql = `SELECT id, destination, 
-              DATE_FORMAT(from_date, "%d-%m-%Y") AS from_date, 
-              DATE_FORMAT(to_date, "%d-%m-%Y") AS to_date, description, CONVERT(image USING utf8) as image, followers, price from vacations.vacation`;
+  const sql = `SELECT id, destination, from_date, to_date, description, CONVERT(image USING utf8) as image, followers, price from vacations.vacation`;
   const vacations = await dal.execute(sql);
   return vacations;
 };
 
-async function getOneVacation(id: number) {
-  const sql = `SELECT * FROM vacation WHERE id = ${id}`;
-  const result = await dal.execute(sql);
-  return result;
-};
+async function getOneVacation(id: number): Promise<VacationModel>{
+  const sql = `
+  SELECT id, destination, from_date, to_date, description, image, followers, price from vacations.vacation WHERE id = ${id}`;
+  const vacations = await dal.execute(sql);
+    const vacation = vacations[0];
+    socket.emitAddVacation(vacation);
+    console.log("user liked vacation: " + vacation.destination);
+
+    if(!vacation){
+      throw new ClientError(404, `id ${id} not found`);
+    }
+    return vacation;
+  };
 
 async function followVacation(data: SavedModel): Promise<SavedModel> {
   const sql = `INSERT INTO followers(user_ID,vacation_ID)
@@ -66,12 +72,12 @@ async function followVacation(data: SavedModel): Promise<SavedModel> {
   return vacation;
 }
 
-async function getFollowedVacations(id:number): Promise<SavedModel> {
-  const sql = `SELECT vacationId FROM followers 
-WHERE userId = ${id}`;
-  const vacations = await dal.execute(sql);
-  return vacations;
-}
+// async function getFollowedVacations(id:number): Promise<SavedModel> {
+//   const sql = `SELECT vacationId FROM followers 
+// WHERE userId = ${id}`;
+//   const vacations = await dal.execute(sql);
+//   return vacations;
+// }
 
 async function deleteFollowedVacation(userId: number, vacationId: number):Promise<void> {
   const sql = `DELETE FROM followers WHERE userId = ${userId} and vacationId = ${vacationId}`;
@@ -87,7 +93,7 @@ async function addNewVacation(vacation: VacationModel): Promise<VacationModel>{
       '${vacation.from_date}',
       '${vacation.to_date}',
       ${vacation.price},
-      0,0);`;
+      0);`;
     const result: OkPacket = await dal.execute(sql);
     vacation.id = result.insertId;
     return vacation;
@@ -121,7 +127,7 @@ async function getAllFollowedVacations(userId:number):Promise<SavedModel>{
                     from_date, 
                     to_date, description, image, destination, followers, price 
                     FROM vacations.vacation
-                    JOIN followers on vacation.id = followers.user_ID 
+                    JOIN followers on vacation.id = followers.vacation_ID 
                     WHERE id = ${userId}
   `;
   const vacations = await dal.execute(sql);
@@ -164,7 +170,6 @@ export default {
   getOneVacation,
   addNewVacation,
   followVacation,
-  getFollowedVacations,
   deleteFollowedVacation,
   deleteVacation,
   updateFullVacation,

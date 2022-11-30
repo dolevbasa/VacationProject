@@ -8,9 +8,6 @@ import groupService from './UserService';
 import SavedModel from '../model/SavedModel';
 import appUrl from './Config';
 
-
-
-
 class SocketIoServer {
     private socket: Socket;
 
@@ -49,7 +46,7 @@ class SocketIoServer {
         // Listen to removing a vacation by user:
         this.socket.on("user-remove-follow",(follow: SavedModel) => {
             followStore.dispatch(deleteFollowAction(follow));
-
+            console.log("user-remove-follow");
         }
         );
 
