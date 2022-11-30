@@ -14,7 +14,7 @@ class VacationService {
 
     // Get all followed vacations:
     public async getAllFollowedVacations(): Promise<VacationModel[]> {
-        const response = await axios.get<VacationModel[]>(appUrl.getAllVacation);
+        const response = await axios.get<VacationModel[]>(appUrl.getFollowers);
         const followedVacations = response.data;
         return followedVacations;
     }
@@ -28,35 +28,6 @@ class VacationService {
         return vacation;
     }
 
-    // Add vacation to API
-    public async addVacation(vacation: VacationModel): Promise<VacationModel> {
-        const myFromData = new FormData();
-        myFromData.append("destination", vacation.destination);
-        myFromData.append("description", vacation.description);
-        myFromData.append("price", vacation.price.toString());
-        myFromData.append("from_date", vacation.from_date.toString());
-        myFromData.append("to_date", vacation.to_date.toString());
-        myFromData.append("image", vacation.image);
-        const response = await axios.post<VacationModel>(appUrl.addVacation, myFromData);
-        const addedVacation = response.data;
-        vacationsStore.dispatch(addVacationAction(addedVacation));
-        return addedVacation;
-    }
-
-    // Update vacation in API
-    public async updateVacation(vacation: VacationModel): Promise<VacationModel> {
-        const myFromData = new FormData();
-        myFromData.append("destination", vacation.destination);
-        myFromData.append("description", vacation.description);
-        myFromData.append("image", vacation.image);
-        myFromData.append("vacationPrice", vacation.price.toString());
-        myFromData.append("from_date", vacation.from_date.toString());
-        myFromData.append("to_date", vacation.to_date.toString());
-        const response = await axios.patch<VacationModel>(appUrl.updateVacation + vacation.id, myFromData);
-        const updatedVacation = response.data;
-        vacationsStore.dispatch(updateVacationAction(updatedVacation));
-        return updatedVacation;
-    }
 
     // Delete vacation from API
     public async deleteVacation(id: number): Promise<void> {

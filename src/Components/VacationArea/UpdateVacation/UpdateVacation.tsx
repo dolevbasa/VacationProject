@@ -29,7 +29,7 @@ function UpdateVacation(): JSX.Element {
             //  get the vacation id from the url
             const id = +params.id;
             vacation.id = id;
-            await vacationsService.updateVacation(vacation);
+            await groupService.updateVacation(vacation);
             notify.success(`Vacation ${vacation.destination} was updated`);
             navigate("/home");
         }
@@ -40,6 +40,7 @@ function UpdateVacation(): JSX.Element {
 
 
     return (
+        <form onSubmit={handleSubmit(submit)} method={"post"} action="/" encType={"multipart/form-data"}>
         <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -58,7 +59,6 @@ function UpdateVacation(): JSX.Element {
                         Update Vacation
                     </Typography>
 
-                    <Box component="form" onSubmit={handleSubmit(submit)} noValidate sx={{ mt: 1 }}>
                         <TextField
                             variant="standard"
                             fullWidth
@@ -167,19 +167,13 @@ function UpdateVacation(): JSX.Element {
                             }}
 
                         />
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-
-                        >Update</Button>
+                        <Button variant="contained" type="submit">UpdateVacation</Button>
                         <Button><NavLink to="/home">Back</NavLink></Button>
 
                     </Box>
-                </Box>
             </Container>
         </ThemeProvider>
+        </form>
     );
 }
 

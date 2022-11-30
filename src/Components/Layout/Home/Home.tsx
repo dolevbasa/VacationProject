@@ -1,5 +1,4 @@
 import Card from '@mui/material/Card';
-import { useEffect, useState } from "react";
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -22,11 +21,7 @@ import Follow from '../../VacationArea/Follow/Follow';
         vacation: VacationModel;
         user: UserModel;
     }
-    
-    
     function Home(props: VacationCardProps): JSX.Element {
-    
-    
         const navigator = useNavigate();
         // Delete vacation
         async function handleDelete(vacationId: number) {
@@ -34,9 +29,9 @@ import Follow from '../../VacationArea/Follow/Follow';
                 // ask the user if he really wants to delete the vacation
                 const answer: boolean = window.confirm('Are you sure you want to delete this vacation?');
                 if (!answer) return;
-                // delete vacation from the server
+                // // delete vacation from the server
                 await vacationsService.deleteVacation(vacationId);
-                // delete vacation from redux
+                // // delete vacation from redux
                 vacationsStore.dispatch(deleteVacationAction(vacationId));
                 notify.success("Vacation deleted");
             }
@@ -66,7 +61,7 @@ import Follow from '../../VacationArea/Follow/Follow';
                 />
                 <CardContent>
                     <Typography variant="subtitle1" color="dark">
-                        {props.vacation.description}
+                        {props.vacation.destination}
                     </Typography>
                     <Typography variant="subtitle2" color="dark">
     

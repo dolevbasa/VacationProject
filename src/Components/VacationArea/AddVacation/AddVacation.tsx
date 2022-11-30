@@ -15,7 +15,6 @@ function AddVacation(): JSX.Element {
     const [account,setAccount] = useState<VacationModel[]>([]);
     //to use useFrom write this line
     const {register , handleSubmit, formState: {errors}}= useForm<VacationModel>();
-    const [userData,setData] = useState<VacationModel>();
     const navigate = useNavigate();
     const params = useParams();
     const id = +(params.id || '');
@@ -161,7 +160,7 @@ function AddVacation(): JSX.Element {
                 <br />
                 <span>{errors.followers?.message}</span>
                 <br /><br /> */}
-                <Button variant="contained" type="submit">Register</Button>
+                <Button variant="contained" type="submit">Add Vacation</Button>
             </form>
                 </Box>
                 </Container>

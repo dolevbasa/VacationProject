@@ -53,7 +53,7 @@ function Follow(props: FollowProps): JSX.Element {
             const followedVacation = await vacationsService.getOneVacation(props.vacationId);
             // update store
             vacationsStore.dispatch(updateVacationAction(followedVacation));
-            // update state
+            // // update state
             setIsFollow(true);
             // notify
             notify.success("Vacation followed");
@@ -75,7 +75,7 @@ function Follow(props: FollowProps): JSX.Element {
             // update state
             setIsFollow(false);
             // notify
-            notify.success("Vacation unfollowed");
+            notify.success("Vacation unFollowed");
         }
         catch (err: any) {
             notify.error(err.message);
