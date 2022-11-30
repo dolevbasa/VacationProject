@@ -127,7 +127,7 @@ async function addFollow(vacationToFollow: SavedModel): Promise<SavedModel> {
   const result: OkPacket = await dal.execute(sql);
 
   // update +1 to followers in vacations table
-  const sqlVacationsTable = `UPDATE vacations.vacation 
+  const sqlVacationsTable = `UPDATE vacations.vacation
                           SET followers = followers + 1 
                           WHERE id = ${vacationToFollow.vacation_ID}`;
   const info: OkPacket = await dal.execute(sqlVacationsTable);

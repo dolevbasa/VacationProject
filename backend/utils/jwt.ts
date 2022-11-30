@@ -7,7 +7,7 @@ const secretKey = "Secret-Key";
 
 function getNewToken(user: UserModel): string {
     const payload = { user };
-    const token = jwt.sign(payload, secretKey);
+    const token = jwt.sign(payload, secretKey,{expiresIn:'60h'});
     return token;
 }
 
