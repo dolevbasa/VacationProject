@@ -27,5 +27,4 @@ server.use(catchAll);
 const httpServer = server.listen(config.port, () =>
   console.log("Listening on http://localhost:" + config.port)
 );
-
 socketLogics.initSocketIo(httpServer);

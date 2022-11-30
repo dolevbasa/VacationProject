@@ -44,12 +44,14 @@ async function addUser(user: UserModel){
     const token = jwt.getNewToken(user);
     return token;
 };
-
+//id,description,destination,from_date,to_date,price,followers,CONVERT(image USING utf8) as image
 // vacations
 async function getAllVacations(): Promise<UserModel[]> {
-  const sql = `SELECT id,description,destination,from_date,to_date,price,followers,CONVERT(image USING utf8) as image FROM vacations.vacation;`;
-  const result = await dal.execute(sql);
-  return result;
+  const sql = `SELECT id, destination, 
+              DATE_FORMAT(from_date, "%d-%m-%Y") AS from_date, 
+              DATE_FORMAT(to_date, "%d-%m-%Y") AS to_date, description, CONVERT(image USING utf8) as image, followers, price from vacations.vacation`;
+  const vacations = await dal.execute(sql);
+  return vacations;
 };
 
 async function getOneVacation(id: number) {
@@ -86,7 +88,7 @@ async function addNewVacation(vacation: VacationModel): Promise<VacationModel>{
       '${vacation.from_date}',
       '${vacation.to_date}',
       ${vacation.price},
-      0,false);`;
+      0,0);`;
     const result: OkPacket = await dal.execute(sql);
     vacation.id = result.insertId;
     return vacation;
@@ -99,13 +101,6 @@ async function deleteVacation(id: number): Promise<void> {
 
 async function updateFullVacation(vacation: VacationModel): Promise<VacationModel> {
   // Validate put
-
-  const dbVacation = await getOneVacation(vacation.id);
-  for (const prop in vacation) {
-      if (vacation[prop] === undefined) {
-          vacation[prop] = dbVacation[prop]
-      }
-  }
   // if user sent an image
 
   const sql = `UPDATE vacations.vacation SET
@@ -114,9 +109,7 @@ async function updateFullVacation(vacation: VacationModel): Promise<VacationMode
               image = '${vacation.image}',
               from_date = '${vacation.from_date}',
               to_date = '${vacation.to_date}',
-              price = ${vacation.price},
-              followers = 0,
-              isFollowed = 0
+              price = ${vacation.price}
               WHERE id = ${vacation.id}`;
   const info: OkPacket = await dal.execute(sql);
   vacation.id = info.insertId;
@@ -136,7 +129,7 @@ async function addFollow(vacationToFollow: SavedModel): Promise<SavedModel> {
   // update +1 to followers in vacations table
   const sqlVacationsTable = `UPDATE vacations.vacation 
                           SET followers = followers + 1 
-                          WHERE vacation_ID = ${vacationToFollow.vacation_ID}`;
+                          WHERE id = ${vacationToFollow.vacation_ID}`;
   const info: OkPacket = await dal.execute(sqlVacationsTable);
   socketLogics.emitAddFollow(vacationToFollow);
   return vacationToFollow;
@@ -152,7 +145,7 @@ async function removeFollow(follow: SavedModel): Promise<void> {
   // update -1 to followers in vacations table
   const sqlVacationsTable = `UPDATE vacations.vacation 
                               SET followers = followers - 1 
-                              WHERE vacation_ID = ${follow.vacation_ID}`;
+                              WHERE id = ${follow.vacation_ID}`;
   const info: OkPacket = await dal.execute(sqlVacationsTable);
   socketLogics.emitRemoveFollow(follow);
 }

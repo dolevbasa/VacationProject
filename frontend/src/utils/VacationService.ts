@@ -28,20 +28,6 @@ class VacationService {
         return vacation;
     }
 
-    // Update vacation in API
-    public async updateVacation(vacation: VacationModel): Promise<VacationModel> {
-        const myFromData = new FormData();
-        myFromData.append("destination", vacation.destination);
-        myFromData.append("description", vacation.description);
-        myFromData.append("image", vacation.image);
-        myFromData.append("vacationPrice", vacation.price.toString());
-        myFromData.append("from_date", vacation.from_date.toString());
-        myFromData.append("to_date", vacation.to_date.toString());
-        const response = await axios.patch<VacationModel>(appUrl.updateVacation + vacation.id, myFromData);
-        const updatedVacation = response.data;
-        vacationsStore.dispatch(updateVacationAction(updatedVacation));
-        return updatedVacation;
-    }
 
     // Delete vacation from API
     public async deleteVacation(id: number): Promise<void> {

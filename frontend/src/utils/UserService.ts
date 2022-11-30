@@ -7,7 +7,7 @@ import UsersModel from "../model/usersModel";
 import { VacationModel } from "../model/vacationModel";
 import { loginAction, logoutAction } from "../Redux/AuthState";
 import { store, vacationsStore } from "../Redux/Store";
-import { updateVacationAction } from "../Redux/VacationsState";
+import { addVacationAction, updateVacationAction } from "../Redux/VacationsState";
 import appUrl from "./Config";
 
 class GroupService{
@@ -53,6 +53,7 @@ class GroupService{
         reader.onload = function () {
             const image = reader.result;
             axios.post<VacationModel>(appUrl.addVacation,{...vacation, image}).then(() => resolve());
+            vacationsStore.dispatch(addVacationAction(vacation));
         };
         reader.onerror = function (error) {
             console.log('Error: ', error);
@@ -63,12 +64,20 @@ class GroupService{
     public async addUser(user:UserModel):Promise<void>{
         const response = await axios.post<UserModel>(appUrl.addUser,user);
     }
-
-    public async updateAllVacation(vacation:VacationModel):Promise<VacationModel>{
-        const response = await axios.put<VacationModel>(appUrl.updateVacation + vacation.id, vacation);
-        const updatedVacation = response.data;
-        vacationsStore.dispatch(updateVacationAction(updatedVacation));
-        return updatedVacation;
+    public async updateVacation(vacation:VacationModel):Promise<void>{
+        return new Promise((resolve, reject) => {
+            const file = vacation.image[0] as unknown as File;
+            let reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                const image = reader.result;
+                axios.put<VacationModel>(appUrl.updateVacation + vacation.id,{...vacation, image}).then(()=>resolve());
+                vacationsStore.dispatch(updateVacationAction(vacation));
+            };
+            reader.onerror = function(error){
+                console.log('Error: ',error);
+            };
+        });
     }
 
 }

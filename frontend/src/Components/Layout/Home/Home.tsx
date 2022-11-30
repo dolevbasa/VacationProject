@@ -34,9 +34,9 @@ import Follow from '../../VacationArea/Follow/Follow';
                 // ask the user if he really wants to delete the vacation
                 const answer: boolean = window.confirm('Are you sure you want to delete this vacation?');
                 if (!answer) return;
-                // delete vacation from the server
+                // // delete vacation from the server
                 await vacationsService.deleteVacation(vacationId);
-                // delete vacation from redux
+                // // delete vacation from redux
                 vacationsStore.dispatch(deleteVacationAction(vacationId));
                 notify.success("Vacation deleted");
             }

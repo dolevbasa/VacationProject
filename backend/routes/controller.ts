@@ -93,13 +93,9 @@ router.get('/api/getFollowedVacations/:id', async (request: Request, response: R
     next(err)
   }
 });
-router.put("api/updateVacation/:id", async (request: Request, response: Response, next: NextFunction) => {
+router.put("/api/updateVacation/:id", async (request: Request, response: Response, next: NextFunction) => {
   try {
-      const id = +request.params.id;
-      request.body.id = id;
-      request.body.image = request.files?.image;
-      const vacation = new VacationModel(request.body);
-      const updateVacation = await logic.updateFullVacation(vacation);
+      const updateVacation = await logic.updateFullVacation(request.body);
       response.status(201).json(updateVacation);
   }
   catch (err: any) {
@@ -132,11 +128,11 @@ router.delete('/api/delete/:vacationId/:userId', async (request: Request, respon
 });
 
 // Follow vacation router
-router.post("/api/addfollow/:id",verifyToken, async (request: Request, response: Response, next: NextFunction) => {
+router.post("/api/addfollow/:id", async (request: Request, response: Response, next: NextFunction) => {
   try {
+      const id = +request.params.id;
       const vacationId = +request.params.id;
-      const user = jwt.getUserFromToken(request);
-      const follow = new SavedModel(user.id, vacationId);
+      const follow = new SavedModel(id, vacationId);
       const followedVacation = await logic.addFollow(follow);
       response.status(201).json(followedVacation);
   }
@@ -148,9 +144,9 @@ router.post("/api/addfollow/:id",verifyToken, async (request: Request, response:
 // Delete follow from vacations
 router.delete("/api/remove/:id",verifyToken, async (request: Request, response: Response, next: NextFunction) => {
   try {
+      const id = +request.params.id;
       const vacationId = +request.params.id;
-      const user = jwt.getUserFromToken(request);
-      const follower = new SavedModel(user.id, vacationId);
+      const follower = new SavedModel(id, vacationId);
       await logic.removeFollow(follower);
       response.status(204);
 

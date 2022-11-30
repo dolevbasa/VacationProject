@@ -53,7 +53,7 @@ function Follow(props: FollowProps): JSX.Element {
             const followedVacation = await vacationsService.getOneVacation(props.vacationId);
             // update store
             vacationsStore.dispatch(updateVacationAction(followedVacation));
-            // update state
+            // // update state
             setIsFollow(true);
             // notify
             notify.success("Vacation followed");
@@ -84,7 +84,7 @@ function Follow(props: FollowProps): JSX.Element {
 
     return (
         <CardActions>
-            {isFollow ? <IconButton onClick={removeFollow}><FavoriteIcon /></IconButton> : <IconButton onClick={addFollow}><FavoriteBorderIcon /></IconButton>}
+            {isFollow ? <IconButton onClick={addFollow}><FavoriteIcon /></IconButton> : <IconButton onClick={removeFollow}><FavoriteBorderIcon /></IconButton>}
             {props.followers}
         </CardActions>
 

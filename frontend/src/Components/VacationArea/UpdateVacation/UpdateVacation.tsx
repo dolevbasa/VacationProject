@@ -29,7 +29,7 @@ function UpdateVacation(): JSX.Element {
             //  get the vacation id from the url
             const id = +params.id;
             vacation.id = id;
-            await groupService.updateAllVacation(vacation);
+            await groupService.updateVacation(vacation);
             notify.success(`Vacation ${vacation.destination} was updated`);
             navigate("/home");
         }
