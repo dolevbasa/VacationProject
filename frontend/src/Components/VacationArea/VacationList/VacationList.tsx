@@ -9,6 +9,7 @@ import notify from "../../../utils/Notify";
 import Home from "../../Layout/Home/Home";
 import Loading from "../../Loading/Loading";
 import ReactPaginate from "react-paginate";
+import React from "react";
 
 
 
@@ -68,8 +69,8 @@ function VacationsList(): JSX.Element {
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                 {vacations ? vacations.slice(pagesVisited, pagesVisited + PER_PAGE).map(v =>
                     <Grid item xs={2} sm={4} md={3} key={v.id}>
-                        <Home key={v.destination} vacation={v} user={user} />
-                    </Grid>) : <Loading />}
+                        <Home key={v.id} vacation={v} user={user} />
+                    </Grid>) : <Loading/>}
             </Grid>
             <br />
             <ReactPaginate

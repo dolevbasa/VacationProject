@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router";
 import groupService from "../../../utils/UserService";
 import notify from "../../../utils/Notify";
 import { VacationModel } from "../../../model/vacationModel";
+import vacationsService from "../../../utils/VacationService";
 
 const theme = createTheme();
 
@@ -21,10 +22,9 @@ function AddVacation(): JSX.Element {
     //hook form....
     async function send(vacation:VacationModel){
         try{
-            await groupService.addVacation(vacation)
+            await vacationsService.addVacation(vacation);
             notify.success(`Vacation ${vacation.destination} was added`);
             navigate("/home");
-            //manual routing....
         } catch (err:any){
             notify.error(err.message);
         }
@@ -35,7 +35,7 @@ function AddVacation(): JSX.Element {
         if (id>0){
             
         }
-        groupService.getAllVacation()
+        vacationsService.getAllVacations()
         .then (user => setAccount(user))
         .catch(err=>alert(err.message));
     },[]);
@@ -148,18 +148,6 @@ function AddVacation(): JSX.Element {
                 <br />
                 <span>{errors.price?.message}</span>
                 <br /><br />
-                {/* <TextField label="User Password"  variant="outlined"
-                    inputProps={{ sx: { color: "black", backgroundColor: "white" } }}
-                    InputLabelProps={{ style: { color: "black", backgroundColor: "white" } }}
-                    {...register("followers", {
-                        required: {
-                            value: true,
-                            message: "Please input your Password",
-                        },
-                    })} />
-                <br />
-                <span>{errors.followers?.message}</span>
-                <br /><br /> */}
                 <Button variant="contained" type="submit">Add Vacation</Button>
             </form>
                 </Box>

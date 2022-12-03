@@ -43,17 +43,19 @@ async function addUser(user: UserModel){
     const token = jwt.getNewToken(user);
     return token;
 };
-//id,description,destination,from_date,to_date,price,followers,CONVERT(image USING utf8) as image
 // vacations
 async function getAllVacations(): Promise<UserModel[]> {
-  const sql = `SELECT id, destination, from_date, to_date, description, CONVERT(image USING utf8) as image, followers, price from vacations.vacation`;
+  const sql = `
+  SELECT id, destination, DATE_FORMAT(from_date, "%d-%M-%Y") AS from_date, DATE_FORMAT(to_date, "%d-%M-%Y") AS to_date, description, CONVERT(image USING utf8) as image, followers, price from vacations.vacation
+  ORDER BY from_date
+  `;
   const vacations = await dal.execute(sql);
   return vacations;
 };
 
 async function getOneVacation(id: number): Promise<VacationModel>{
   const sql = `
-  SELECT id, destination, from_date, to_date, description, image, followers, price from vacations.vacation WHERE id = ${id}`;
+  SELECT id, destination, DATE_FORMAT(from_date, "%d-%M-%Y") AS from_date, DATE_FORMAT(to_date, "%d-%M-%Y") AS to_date, description, CONVERT(image USING utf8) as image, followers, price from vacations.vacation WHERE id = ${id}`;
   const vacations = await dal.execute(sql);
     const vacation = vacations[0];
     socket.emitAddVacation(vacation);
@@ -85,7 +87,6 @@ async function deleteFollowedVacation(userId: number, vacationId: number):Promis
 }
 
 async function addNewVacation(vacation: VacationModel): Promise<VacationModel>{
-  
   const sql = `INSERT INTO vacations.vacation VALUES(DEFAULT,
       '${vacation.description}',
       '${vacation.destination}',
