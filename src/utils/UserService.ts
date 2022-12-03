@@ -21,11 +21,6 @@ class GroupService{
         return false;
     }
 
-    public async getAllVacation():Promise<VacationModel[]>{
-        const response = await axios.get<VacationModel[]>(appUrl.getAllVacation);
-        return response.data;
-    }
-
     public isLoggedIn(): boolean {
         return store.getState().user !== null;
     }
@@ -49,37 +44,6 @@ class GroupService{
     public async getAllUsers():Promise<UserModel[]>{
         const response = await axios.get<UserModel[]>(appUrl.users);
         return response.data;
-    }
-
-    public async addVacation(vacation:VacationModel):Promise<void>{
-        return new Promise((resolve, reject) => {
-        const file = vacation.image[0] as unknown as File;
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            const image = reader.result;
-            axios.post<VacationModel>(appUrl.addVacation,{...vacation, image}).then(() => resolve());
-            vacationsStore.dispatch(addVacationAction(vacation));
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-    });
-    }
-    public async updateVacation(vacation:VacationModel):Promise<void>{
-        return new Promise((resolve, reject) => {
-            const file = vacation.image[0] as unknown as File;
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function () {
-                const image = reader.result;
-                axios.put<VacationModel>(appUrl.updateVacation + vacation.id,{...vacation, image}).then(()=>resolve());
-                vacationsStore.dispatch(updateVacationAction(vacation));
-            };
-            reader.onerror = function(error){
-                console.log('Error: ',error);
-            };
-        });
     }
 
 }
