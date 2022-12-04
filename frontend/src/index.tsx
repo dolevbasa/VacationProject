@@ -8,9 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import interceptorsService from "./utils/interceptorsService";
 import socketIoService from "./utils/SocketIoService";
 
-interceptorsService.createInterceptors();
+interceptorsService.createInterceptors(); // create access to token service
 
-socketIoService.connect();
+socketIoService.connect(); //connect to SocketIoService
 
 ReactDOM.render(
   <React.StrictMode>

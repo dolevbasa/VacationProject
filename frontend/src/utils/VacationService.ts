@@ -31,7 +31,7 @@ class VacationService {
         reader.readAsDataURL(file);
         reader.onload = async function () {
             const image = reader.result;
-            axios.post<VacationModel>(appUrl.addVacation,{...vacation, image}).then(() => resolve());
+            await axios.post<VacationModel>(appUrl.addVacation,{...vacation, image}).then(() => resolve());
             vacationsStore.dispatch(addVacationAction(vacation));
         };
         reader.onerror = function (error) {

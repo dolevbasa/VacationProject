@@ -27,7 +27,6 @@ class SocketIoServer {
         // Listen to updating a vacation by admin:
         this.socket.on("admin-update-vacation", (vacation: VacationModel) => {
             vacationsStore.dispatch(updateVacationAction(vacation));
-            console.log("admin-update-vacation");
             
         });
 
@@ -39,21 +38,17 @@ class SocketIoServer {
         // Listen to adding a vacation by user:
         this.socket.on("user-add-follow",(follow: SavedModel) => {
             followStore.dispatch(addFollowAction(follow));
-            console.log("user-add-follow");
-            
         });
 
         // Listen to removing a vacation by user:
         this.socket.on("user-remove-follow",(follow: SavedModel) => {
             followStore.dispatch(deleteFollowAction(follow));
-            console.log("user-remove-follow");
         }
         );
 
         // Listen to followed vacations by user:
         this.socket.on("user-followed-vacations", (vacation: VacationModel) => {
             vacationsStore.dispatch(updateVacationAction(vacation));
-            console.log("user-followed-vacations");
         });
         
     }

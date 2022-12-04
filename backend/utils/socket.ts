@@ -43,7 +43,6 @@ function emitRemoveFollow(follow: SavedModel): void {
 
 function emitFollowedVacations(vacation: VacationModel): void {
     socketIoServer.sockets.emit("user-followed-vacations", vacation);
-    console.log("emitFollowedVacations");
 }
 
 export default {

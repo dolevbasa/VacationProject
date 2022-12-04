@@ -30,7 +30,6 @@ function Register(): JSX.Element {
     }
 
     useEffect(()=>{
-        console.log(id);
         if (id>0){
             //load data from data base :)
             

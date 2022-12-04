@@ -31,7 +31,6 @@ function AddVacation(): JSX.Element {
     }
 
     useEffect(()=>{
-        console.log(id);
         if (id>0){
             
         }
