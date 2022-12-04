@@ -16,13 +16,7 @@ function Login(): JSX.Element {
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm<UserModel>();
     const [users, setData] = useState("");
-    const onUser = (args: SyntheticEvent) => {
-        let nameValue = (args.target as HTMLInputElement).value;
-        console.log(nameValue);
-        setData(nameValue);
-    }
     const send = async (userData: UserModel) => {
-        console.log(userData);
         try{
             await groupService.LoginUser(userData);
             notify.success("you are logged in");
