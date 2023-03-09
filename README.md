@@ -2,20 +2,20 @@
 
 ## how to install 
 ### go to backend and install the sql file 
-# then open terminal:
+### then open terminal:
 
-# cd backend
+### cd backend
 
-# npm install
+### npm install
 
-# npm run server
+### npm run server
 
-# then open one more terminal:
+### then open one more terminal:
 
-# cd frontend
+### cd frontend
 
-# npm install
+### npm install
 
-# npm run start
+### npm run start
 
 ## Enjoy ;)
