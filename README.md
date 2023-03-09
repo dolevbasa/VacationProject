@@ -1,7 +1,7 @@
 # VacationProject
 
 ## how to install 
-# go to backend and install the sql file 
+### go to backend and install the sql file 
 # then open terminal:
 
 # cd backend
